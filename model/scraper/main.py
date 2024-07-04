@@ -23,7 +23,7 @@ def get_score():
         
         if file:
             inputpdf = PdfReader(file.stream)
-            output_dir = 'recurzive/model/scraper/pages'
+            output_dir = 'temp'
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -44,18 +44,18 @@ def get_score():
                 
                 ocr = TesseractOCR(lang='eng')
                 
-                temp_xlsx = 'recurzive/model/scraper/temp_tables.xlsx'
+                temp_xlsx = 'temp/temp_tables.xlsx'
                 pdf.to_xlsx(temp_xlsx, ocr=ocr)
                 
                 df = pd.read_excel(temp_xlsx)
                 
                 all_tables = pd.concat([all_tables, df], ignore_index=True)
 
-        final_xlsx = 'recurzive/model/scraper/final_tables.xlsx'
+        final_xlsx = 'temp/final_tables.xlsx'
         all_tables.to_excel(final_xlsx, index=False)
 
 
-        df = pd.read_excel('/home/haideraqeeb-pc/code/recurzive/recurzive/model/scraper/recurzive/model/scraper/final_tables.xlsx')
+        df = pd.read_excel('temp/final_tables.xlsx')
         df["Credit"] = df["Credit"].str.replace(',', '')
         df["Credit"] = df["Credit"].astype(float)
         sum = df["Credit"].sum()
@@ -70,13 +70,9 @@ def get_score():
     
 @app.route("/get_history", methods=["GET"])
 def get_history():
-    df = pd.read_excel('/home/haideraqeeb-pc/code/recurzive/recurzive/model/scraper/recurzive/model/scraper/final_tables.xlsx')
+    df = pd.read_excel('temp/final_tables.xlsx')
     ret = df.to_dict(orient="records")
     return jsonify(ret) 
-    
-
-    return ret
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
