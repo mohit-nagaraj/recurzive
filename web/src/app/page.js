@@ -14,7 +14,7 @@ import LoanModal from "@/components/BankModal.js";
 import axios from "axios";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 export default function Home() {
   const fileRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +23,8 @@ export default function Home() {
   const [score, setScore] = useState(30);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [values, setValues] = useState({});
+  const [netWorth, setNetWorth] = useState(0);
+  const [familyMembers, setFamilyMembers] = useState(0);
   const openModal = (
     upper_bound_amount,
     lower_bound_amount,
@@ -35,9 +37,9 @@ export default function Home() {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-  const notify = (id) => toast.success(`Loan applied successfully with id ${id}`);
+  const notify = (id) =>
+    toast.success(`Loan applied successfully with id ${id}`);
   const handleSubmitFormData = async (formData) => {
-    
     const amount = formData.loanAmount;
     const duration = formData.loanDuration;
     const interest = formData.averageInterestRate;
@@ -53,7 +55,6 @@ export default function Home() {
     notify(docReference.id);
     // Handle form submission logic here
     closeModal(); // Close modal after submission
-    
   };
   const handleSelectFile = () => {
     fileRef.current.click();
@@ -85,16 +86,36 @@ export default function Home() {
     const formData = new FormData();
     const pdf = fileRef.current.files[0];
     formData.append("pdf", pdf);
-    const familyMembers = e.target.familyMemebers.value;
-    const netWorth = e.target.netWorth.value;
-    formData.append("familyMembers", familyMembers);
-    formData.append("netWorth", netWorth);
+    const familyMembers = parseInt(e.target.familyMemebers.value);
+    const netWorth = parseInt(e.target.netWorth.value);
+    // formData.append("familyMembers", familyMembers);
+    // formData.append("netWorth", netWorth);
     try {
-      await axios.post("http://localhost:3000/api/score", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:5000/get_score",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const income = response.data[0].income;
+      console.log(income);
+
+      const response2 = await axios.post(
+        "https://1dzrr69b-5000.inc1.devtunnels.ms/generator",
+        {
+          income: income,
+          members: familyMembers,
+          net: netWorth,
+        }
+      );
+      setNetWorth(netWorth);
+      setFamilyMembers(familyMembers);
+      // console.log(response2.data);
+      setScore(response2.data[0].prediction[0]);
       // Simulated API call
       console.log("Simulated API call success");
     } catch (error) {
@@ -230,15 +251,15 @@ export default function Home() {
                 <li></li>
                 <li className="flex items-center mb-2">
                   <MdPeopleAlt className="mr-2" size={20} />
-                  Family Members: 4
+                  Family Members: {familyMembers}
                 </li>
                 <li className="flex items-center mb-2">
                   <RiMoneyDollarCircleFill className="mr-2" size={20} />
-                  Net Worth: $500,000
+                  Net Worth: ₹{netWorth}
                 </li>
                 <li className="flex items-center mb-2">
                   <GrScorecard className="mr-2" size={20} />
-                  Pseduo Credit Score: 75 / 100
+                  Pseduo Credit Score: {score} / 900
                 </li>
               </ul>
             </div>
@@ -246,7 +267,8 @@ export default function Home() {
               {/* React D3 Speedometer */}
               <div>
                 <ReactSpeedometer
-                  maxValue={100}
+                  maxValue={900}
+                  minValue={300}
                   value={score}
                   needleColor="blue"
                   startColor="red"
@@ -289,9 +311,9 @@ export default function Home() {
                       <div key={index}>
                         <p className="font-semibold">
                           ₹
-                          {(bank.score_ranges[score - (score % 10)].loan_amount
+                          {(bank.score_ranges[score - (score % 60)].loan_amount
                             .lower_bound +
-                            bank.score_ranges[score - (score % 10)].loan_amount
+                            bank.score_ranges[score - (score % 60)].loan_amount
                               .upper_bound) /
                             2}
                         </p>
@@ -300,9 +322,9 @@ export default function Home() {
                     <td className="py-2 px-10">
                       <div key={index}>
                         <p className="font-semibold">
-                          {(bank.score_ranges[score - (score % 10)]
+                          {(bank.score_ranges[score - (score % 60)]
                             .interest_rate.lower_bound +
-                            bank.score_ranges[score - (score % 10)]
+                            bank.score_ranges[score - (score % 60)]
                               .interest_rate.lower_bound) /
                             2}
                           %
@@ -314,13 +336,13 @@ export default function Home() {
                         className="px-4 py-2 bg-black text-white font-semibold rounded-lg"
                         onClick={() =>
                           openModal(
-                            bank.score_ranges[score - (score % 10)].loan_amount
+                            bank.score_ranges[score - (score % 60)].loan_amount
                               .upper_bound,
-                            bank.score_ranges[score - (score % 10)].loan_amount
+                            bank.score_ranges[score - (score % 60)].loan_amount
                               .lower_bound,
-                            (bank.score_ranges[score - (score % 10)]
+                            (bank.score_ranges[score - (score % 60)]
                               .interest_rate.lower_bound +
-                              bank.score_ranges[score - (score % 10)]
+                              bank.score_ranges[score - (score % 60)]
                                 .interest_rate.lower_bound) /
                               2
                           )
