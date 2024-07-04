@@ -41,7 +41,7 @@ export default function Home() {
   };
   return (
     <main className="flex flex-1 flex-col p-4 md:p-6">
-      <h1 className="w-full h-fit font-bold text-2xl mb-2">Get Your Score</h1>
+      <h1 className="w-full h-fit font-bold text-2xl mb-8">Get Your Score</h1>
       <form
         className="w-full h-full pr-24 flex flex-col items-center"
         onSubmit={handleSubmit}
@@ -54,7 +54,7 @@ export default function Home() {
           id="pdf"
           onChange={handleFileChange}
         />
-        <label className="w-full text-left font-semibold text-lg">
+        <label className="w-full text-left font-semibold text-lg mb-4">
           Upload Bank Statement
         </label>
         {!pdfUrl && (
@@ -109,7 +109,7 @@ export default function Home() {
             <label className="font-semibold text-lg">
               No.of family members
             </label>
-            <div className="flex flex-nowrap items-center border-black/40 border gap-4 px-4 py-2 rounded-xl">
+            <div className="flex flex-nowrap items-center mt-2 border-black/40 border gap-4 px-4 py-2 rounded-xl">
               <MdPeopleAlt size={25} />
               <input
                 type="number"
@@ -122,7 +122,7 @@ export default function Home() {
           </div>
           <div className="flex-1 w-full ">
             <label className="font-semibold text-lg">Current Net Worth</label>
-            <div className="flex flex-nowrap items-center border-black/40 border gap-4 px-4 py-2 rounded-xl">
+            <div className="flex flex-nowrap items-center mt-2 border-black/40 border gap-4 px-4 py-2 rounded-xl">
               <RiMoneyDollarCircleFill size={25} />
               <input
                 type="number"
