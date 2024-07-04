@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@vapi-ai/web": "^2.0.0",
+    "react-spinners": "^0.14.1"
+  }
+}
