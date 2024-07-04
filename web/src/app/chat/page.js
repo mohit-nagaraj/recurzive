@@ -5,6 +5,7 @@ import axios from "axios";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Switch } from "@material-tailwind/react";
 import Caller from "@/components/caller";
+import Markdown from 'react-markdown'
 
 const genAI = new GoogleGenerativeAI("AIzaSyBQ_C13UOOXxqcZHciDZnLo1h-Zhp_yz3M");
 
@@ -94,7 +95,7 @@ setInput("");
                 message.sender === "bot" ? "bg-gray-200" : "bg-black text-white"
               }`}
             >
-              {message.text}
+              <Markdown>{message.text}</Markdown>
             </div>
           </div>
         ))}
