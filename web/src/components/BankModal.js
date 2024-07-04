@@ -17,13 +17,7 @@ const customStyles = {
   },
 };
 
-const LoanModal = ({
-  isOpen,
-  closeModal,
-  handleSubmit,
-  upper_bound_amount,
-  lower_bound_amount,
-}) => {
+const LoanModal = ({ isOpen, closeModal, handleSubmit, values }) => {
   const [loanAmount, setLoanAmount] = useState("");
   const [loanDuration, setLoanDuration] = useState("");
 
@@ -37,13 +31,16 @@ const LoanModal = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (loanAmount < lower_bound_amount || loanAmount > upper_bound_amount) {
+    if (
+      loanAmount < values.lower_bound_amount ||
+      loanAmount > values.upper_bound_amount
+    ) {
       alert(
-        `Loan amount should be between ${lower_bound_amount} and ${upper_bound_amount}`
+        `Loan amount should be between ${values.lower_bound_amount} and ${values.upper_bound_amount}`
       );
       return;
     }
-    handleSubmit({ loanAmount, loanDuration });
+    handleSubmit({ loanAmount, loanDuration, ...values });
   };
 
   return (
