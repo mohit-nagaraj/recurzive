@@ -6,6 +6,7 @@ import { MdDelete } from "react-icons/md";
 import { MdPeopleAlt } from "react-icons/md";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { FaEdit } from "react-icons/fa";
+import axios from "axios";
 export default function Home() {
   const fileRef = useRef();
   const [pdfUrl, setPdfUrl] = useState(null); // State to store the PDF URL
@@ -28,16 +29,24 @@ export default function Home() {
   const handleDelete = () => {
     setPdfUrl(null);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     const pdf = fileRef.current.files[0];
     formData.append("pdf", pdf);
     const familyMemebers = e.target.familyMemebers.value;
     const netWorth = e.target.netWorth.value;
-    formData.append("familyMemebers", familyMemebers);
+    formData.append("familyMembers", familyMemebers);
     formData.append("netWorth", netWorth);
-    console.log(formData);
+    try {
+      await axios
+        .post("http://localhost:3000/api/score", formData)
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <main className="flex flex-1 flex-col p-4 md:p-6">
