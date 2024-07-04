@@ -11,6 +11,10 @@ import { GrScorecard } from "react-icons/gr";
 import ReactSpeedometer from "react-d3-speedometer";
 import { data } from "../dummy/dummy.js";
 import LoanModal from "@/components/BankModal.js";
+import axios from "axios";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { toast } from 'react-toastify';
 export default function Home() {
   const fileRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
@@ -31,14 +35,24 @@ export default function Home() {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
-  const handleSubmitFormData = (formData) => {
-    console.log("Submitting form with data:", formData);
+  const notify = (id) => toast.success(`Loan applied successfully with id ${id}`);
+  const handleSubmitFormData = async (formData) => {
+    
     const amount = formData.loanAmount;
     const duration = formData.loanDuration;
-
+    // const interest =
+    const loanRef = collection(db, "loan");
+    const docReference = doc(loanRef);
+    await setDoc(docReference, {
+      amount: parseInt(amount),
+      months: parseInt(duration),
+      interest: 10,
+      paid: 0,
+    });
+    notify(docReference.id);
     // Handle form submission logic here
     closeModal(); // Close modal after submission
+    
   };
   const handleSelectFile = () => {
     fileRef.current.click();
@@ -64,28 +78,31 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Start loading
-
+    console.log("Form submitted");
     // Simulate an asynchronous operation like a network request
-    setTimeout(async () => {
-      const formData = new FormData();
-      const pdf = fileRef.current.files[0];
-      formData.append("pdf", pdf);
-      const familyMembers = e.target.familyMemebers.value;
-      const netWorth = e.target.netWorth.value;
-      formData.append("familyMembers", familyMembers);
-      formData.append("netWorth", netWorth);
 
-      try {
-        // Simulated API call
-        // await axios.post("http://localhost:3000/api/score", formData);
-        console.log("Simulated API call success");
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false); // Stop loading
-        setState(1);
-      }
-    }, 3000); // Adjust the delay here as needed
+    const formData = new FormData();
+    const pdf = fileRef.current.files[0];
+    formData.append("pdf", pdf);
+    const familyMembers = e.target.familyMemebers.value;
+    const netWorth = e.target.netWorth.value;
+    formData.append("familyMembers", familyMembers);
+    formData.append("netWorth", netWorth);
+    try {
+      await axios.post("http://localhost:3000/api/score", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      // Simulated API call
+      console.log("Simulated API call success");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false); // Stop loading
+      setState(1);
+    }
+    // Adjust the delay here as needed
   };
 
   return (
