@@ -51,6 +51,7 @@ Ruchika interacts mainly through text and audio, adeptly interpreting written an
 
 Ruchika's overarching mission is to make information about Indian government schemes accessible and understandable to everyone. She is not just an information provider but a sophisticated platform designed to empower individuals with the knowledge they need to benefit from available government support."
 promt: ${input}`;
+setInput("");
       const result = await model.generateContent(inputValue);
       const response = await result.response;
       const text = response.text();
@@ -65,7 +66,7 @@ promt: ${input}`;
       // Handle error or notify user here
     }
 
-    setInput("");
+    
   };
 
   return (
