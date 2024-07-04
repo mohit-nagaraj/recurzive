@@ -10,12 +10,31 @@ import { FaSpinner } from "react-icons/fa6";
 import { GrScorecard } from "react-icons/gr";
 import ReactSpeedometer from "react-d3-speedometer";
 import { data } from "../dummy/dummy.js";
+import LoanModal from "@/components/BankModal.js";
 export default function Home() {
   const fileRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null); // State to store the PDF URL
   const [state, setState] = useState(0);
   const [score, setScore] = useState(30);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const handleSubmitFormData = (formData) => {
+    console.log("Submitting form with data:", formData);
+    const amount = formData.loanAmount;
+    const duration = formData.loanDuration;
+
+    // Handle form submission logic here
+    closeModal(); // Close modal after submission
+  };
   const handleSelectFile = () => {
     fileRef.current.click();
   };
@@ -218,8 +237,7 @@ export default function Home() {
             </div>
           </div>
           <div className="w-full flex flex-col">
-            {/* generate the table heretabe here
-             */}
+            {/* generate the table heretabe here  */}
             <table className="w-full mt-6">
               <thead>
                 <tr>
@@ -255,6 +273,17 @@ export default function Home() {
                                   ranges.loan_amount.upper_bound) /
                                   2}
                               </p>
+                              <LoanModal
+                                isOpen={modalIsOpen}
+                                closeModal={closeModal}
+                                handleSubmit={handleSubmitFormData}
+                                upper_bound_amount={
+                                  ranges.loan_amount.lower_bound
+                                }
+                                lower_bound_amount={
+                                  ranges.loan_amount.upper_bound
+                                }
+                              />
                             </div>
                           );
                         }
@@ -277,7 +306,10 @@ export default function Home() {
                       })}
                     </td>
                     <td className="py-2">
-                      <button className="px-4 py-2 bg-black text-white font-semibold rounded-lg">
+                      <button
+                        className="px-4 py-2 bg-black text-white font-semibold rounded-lg"
+                        onClick={openModal}
+                      >
                         Apply
                       </button>
                     </td>
