@@ -1,30 +1,27 @@
 
 import Button from "./base/button";
-import AssistantSpeechIndicator from "./call/AssitantSpeechIndicator";
-import VolumeLevel from "./call/VolumeLevel";
-
+import { FaMicrophone } from "react-icons/fa";
 const ActiveCallDetail = ({ assistantIsSpeaking, volumeLevel, onEndCallClick }) => {
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "15px",
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-          width: "400px",
-          height: "200px",
-        }}
-      >
-        <AssistantSpeechIndicator isSpeaking={assistantIsSpeaking} />
-        <VolumeLevel volume={volumeLevel} />
-      </div>
+      <button
+      className="glow-icon"
+      style={{
+        backgroundColor: "white",
+        color: "black",
+        border: "2px solid #ddd",
+        borderRadius: "50%",
+        padding: "2rem ",
+        fontSize: "16px",
+        outline: "none",
+        // boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+        transition: "all 0.3s ease",
+      }}
+    >
+      <FaMicrophone size={36} color={assistantIsSpeaking ? "#3ef07c" : "#f03e3e"}/>
+    </button>
       <div style={{ marginTop: "20px", textAlign: "center" }}>
-        <Button label="End Call" onClick={onEndCallClick} />
+        <Button type="label" label="End Call" onClick={onEndCallClick} />
       </div>
     </div>
   );

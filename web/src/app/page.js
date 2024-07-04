@@ -1,4 +1,3 @@
-import Caller from "@/components/caller";
 
 export default function Home() {
   return (
@@ -10,7 +9,7 @@ export default function Home() {
         {/* <Search value={searchParams.q} /> */}
       </div>
       {/* <UsersTable users={users} offset={newOffset} /> */}
-      <Caller />
+      
     </main>
   );
 }
