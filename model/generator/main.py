@@ -1,13 +1,13 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pickle
-from sklearn.ensemble import RandomForestRegressor
-import numpy as np
+# from sklearn.ensemble import RandomForestRegressor
+# import numpy as np
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/generator", methods=["GET"])
+@app.route("/generator", methods=["POST"])
 def generator():
     try:
         json_data = request.get_json()
