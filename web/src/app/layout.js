@@ -6,10 +6,11 @@ import { IoTriangle } from "react-icons/io5";
 import Link from 'next/link';
 import { NavItem } from "@/components/nav-item";
 import {Button} from "@/components/button"
+import { MdOutlinePayment } from "react-icons/md";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "recurzive",
+  title: "Recurzive",
   description: "hackathon",
 };
 
@@ -42,6 +43,10 @@ export default function RootLayout({ children }) {
                   <NavItem href="/chat">
                     <IoTriangle size={22} />
                     Chatbot
+                  </NavItem>
+                  <NavItem href="/payment">
+                    <MdOutlinePayment size={22} />
+                    Payment
                   </NavItem>
                 </nav>
               </div>
