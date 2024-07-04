@@ -14,7 +14,7 @@ import LoanModal from "@/components/BankModal.js";
 import axios from "axios";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-
+import { toast } from 'react-toastify';
 export default function Home() {
   const fileRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
@@ -30,21 +30,24 @@ export default function Home() {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
+  const notify = (id) => toast.success(`Loan applied successfully with id ${id}`);
   const handleSubmitFormData = async (formData) => {
-    console.log("Submitting form with data:", formData);
+    
     const amount = formData.loanAmount;
     const duration = formData.loanDuration;
     // const interest =
     const loanRef = collection(db, "loan");
-    await setDoc(loanRef, {
-      amount: amount,
-      months: duration,
+    const docReference = doc(loanRef);
+    await setDoc(docReference, {
+      amount: parseInt(amount),
+      months: parseInt(duration),
       interest: 10,
       paid: 0,
     });
+    notify(docReference.id);
     // Handle form submission logic here
     closeModal(); // Close modal after submission
+    
   };
   const handleSelectFile = () => {
     fileRef.current.click();

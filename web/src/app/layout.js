@@ -7,6 +7,9 @@ import Link from 'next/link';
 import { NavItem } from "@/components/nav-item";
 import {Button} from "@/components/button"
 import { MdOutlinePayment } from "react-icons/md";
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -18,6 +21,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
+        <ToastContainer />
         <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
           <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
             <div className="flex h-full max-h-screen flex-col gap-2"> 
