@@ -18,9 +18,14 @@ export default function Home() {
   const [state, setState] = useState(0);
   const [score, setScore] = useState(30);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  const openModal = () => {
+  const [values, setValues] = useState({});
+  const openModal = (
+    upper_bound_amount,
+    lower_bound_amount,
+    averageInterestRate
+  ) => {
     setModalIsOpen(true);
+    setValues({ upper_bound_amount, lower_bound_amount, averageInterestRate });
   };
 
   const closeModal = () => {
@@ -263,56 +268,55 @@ export default function Home() {
                       <p className="font-semibold text-lg">{bank.name}</p>
                     </td>
                     <td className="py-2 px-12">
-                      {Object.entries(bank.score_ranges).map(([s, ranges]) => {
-                        if (s < score && s >= score - 10) {
-                          return (
-                            <div key={s}>
-                              <p className="font-semibold">
-                                ₹
-                                {(ranges.loan_amount.lower_bound +
-                                  ranges.loan_amount.upper_bound) /
-                                  2}
-                              </p>
-                              <LoanModal
-                                isOpen={modalIsOpen}
-                                closeModal={closeModal}
-                                handleSubmit={handleSubmitFormData}
-                                upper_bound_amount={
-                                  ranges.loan_amount.lower_bound
-                                }
-                                lower_bound_amount={
-                                  ranges.loan_amount.upper_bound
-                                }
-                              />
-                            </div>
-                          );
-                        }
-                      })}
+                      <div key={index}>
+                        <p className="font-semibold">
+                          ₹
+                          {(bank.score_ranges[score - (score % 10)].loan_amount
+                            .lower_bound +
+                            bank.score_ranges[score - (score % 10)].loan_amount
+                              .upper_bound) /
+                            2}
+                        </p>
+                      </div>
                     </td>
                     <td className="py-2 px-10">
-                      {Object.entries(bank.score_ranges).map(([s, ranges]) => {
-                        if (s < score && s >= score - 10) {
-                          return (
-                            <div key={s}>
-                              <p className="font-semibold">
-                                {(ranges.interest_rate.lower_bound +
-                                  ranges.interest_rate.upper_bound) /
-                                  2}
-                                %
-                              </p>
-                            </div>
-                          );
-                        }
-                      })}
+                      <div key={index}>
+                        <p className="font-semibold">
+                          {(bank.score_ranges[score - (score % 10)]
+                            .interest_rate.lower_bound +
+                            bank.score_ranges[score - (score % 10)]
+                              .interest_rate.lower_bound) /
+                            2}
+                          %
+                        </p>
+                      </div>
                     </td>
                     <td className="py-2">
                       <button
                         className="px-4 py-2 bg-black text-white font-semibold rounded-lg"
-                        onClick={openModal}
+                        onClick={() =>
+                          openModal(
+                            bank.score_ranges[score - (score % 10)].loan_amount
+                              .upper_bound,
+                            bank.score_ranges[score - (score % 10)].loan_amount
+                              .lower_bound,
+                            (bank.score_ranges[score - (score % 10)]
+                              .interest_rate.lower_bound +
+                              bank.score_ranges[score - (score % 10)]
+                                .interest_rate.lower_bound) /
+                              2
+                          )
+                        }
                       >
                         Apply
                       </button>
                     </td>
+                    <LoanModal
+                      isOpen={modalIsOpen}
+                      closeModal={closeModal}
+                      handleSubmit={handleSubmitFormData}
+                      values={values}
+                    />
                   </tr>
                 ))}
               </tbody>
