@@ -36,7 +36,6 @@ export default function Chat() {
 
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
-      
       const result = await model.generateContent(input);
       const response = await result.response;
       const text = response.text();
@@ -64,7 +63,7 @@ export default function Chat() {
           Voicebot
         </div>
       </div>
-      {!isVoiceBot&&<div className="flex-grow overflow-auto p-4 space-y-2 max-h-[calc(100vh-135px)] overflow-y-auto">
+      {!isVoiceBot&&<div className="flex-grow overflow-auto p-4 space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -88,7 +87,7 @@ export default function Chat() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            // onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             className="flex-grow p-2 border-2 rounded focus:outline-none focus:border-black"
             placeholder="Type your message here..."
           />
