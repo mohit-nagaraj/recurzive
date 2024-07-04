@@ -35,13 +35,14 @@ export default function Home() {
     
     const amount = formData.loanAmount;
     const duration = formData.loanDuration;
+    const interest = formData.averageInterestRate;
     // const interest =
     const loanRef = collection(db, "loan");
     const docReference = doc(loanRef);
     await setDoc(docReference, {
       amount: parseInt(amount),
       months: parseInt(duration),
-      interest: 10,
+      interest: parseFloat(interest),
       paid: 0,
     });
     notify(docReference.id);
