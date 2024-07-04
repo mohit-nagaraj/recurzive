@@ -54,11 +54,11 @@ export default function Home() {
           id="pdf"
           onChange={handleFileChange}
         />
+        <label className="w-full text-left font-semibold text-lg">
+          Upload Bank Statement
+        </label>
         {!pdfUrl && (
           <div className="w-full">
-            <label className="font-semibold text-lg">
-              Upload Bank Statement
-            </label>
             <button
               className="w-full border min-h-40 border-gray-400 rounded-lg flex flex-col items-center justify-center py-4 gap-2"
               type="button"
