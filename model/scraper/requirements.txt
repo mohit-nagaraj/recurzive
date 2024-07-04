@@ -1,0 +1,6 @@
+img2table
+PyPDF2
+openpyxl
+flask
+flask-cors
+pandas
