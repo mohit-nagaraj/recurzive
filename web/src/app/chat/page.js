@@ -6,24 +6,23 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Switch } from "@material-tailwind/react";
 import Caller from "@/components/caller";
 
-const genAI = new GoogleGenerativeAI('AIzaSyBQ_C13UOOXxqcZHciDZnLo1h-Zhp_yz3M');
+const genAI = new GoogleGenerativeAI("AIzaSyBQ_C13UOOXxqcZHciDZnLo1h-Zhp_yz3M");
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isVoiceBot, setIsVoiceBot] = useState(false);
   // async function run() {
-    
+
   //   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
-  
+
   //   const prompt = "Write a story about a magic backpack."
-  
+
   //   const result = await model.generateContent(prompt);
   //   const response = await result.response;
   //   const text = response.text();
   //   console.log(text);
   // }
-  
 
   useEffect(() => {
     // Load initial chat history or welcome message from Gemini API here if needed
@@ -72,10 +71,12 @@ promt: ${input}`;
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 flex justify-between">
-       <h1 className="font-semibold text-lg md:text-2xl">{!isVoiceBot?'Chatbot':'Voicebot'}</h1>
+        <h1 className="font-semibold text-lg md:text-2xl">
+          {!isVoiceBot ? "Chatbot" : "Voicebot"}
+        </h1>
         <div className="mr-4 flex gap-4 items-center">
           Chatbot
-          <Switch onClick={()=>setIsVoiceBot(prev=>!prev)}/>
+          <Switch onClick={() => setIsVoiceBot((prev) => !prev)} />
           Voicebot
         </div>
       </div>
