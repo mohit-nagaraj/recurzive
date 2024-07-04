@@ -1,25 +1,299 @@
-export default async function Transaction() {
-  const res = [
+"use client";
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+export default function Transaction() {
+  const [data, setData] = useState([
+    {
+      Balance: "7,994.76",
+      Credit: "5,000.00",
+      Debit: null,
+      Description:
+        "BY TRANSFER-INB\nIMPS924416044700/97720435\n13/XX2811/IMPS Txn-",
+      "Ref No./Cheque\nNo.": "MAB00033207679\n8\nMAB00033207679\n8",
+      "Txn Date": "1 Sep 2019",
+      "Value\nDate": "1 Sep 2019",
+    },
+    {
+      Balance: "9,994.76",
+      Credit: "2,000.00",
+      Debit: null,
+      Description:
+        "BY TRANSFER-INB\nIMPS924416044725/97720435\n13/XX2811/IMPS Txn-",
+      "Ref No./Cheque\nNo.": "MAC00033202020\n6\nMAC00033202020\n6",
+      "Txn Date": "1 Sep 2019",
+      "Value\nDate": "1 Sep 2019",
+    },
+    {
+      Balance: "33,844.76",
+      Credit: "23,850.00",
+      Debit: null,
+      Description:
+        "BY TRANSFER-\nNEFT*RBIS0GORJEP*RBI246\n1906242380*TREASURY\nOFFICE-",
+      "Ref No./Cheque\nNo.": "TRANSFER\nFROM\n3199417044302",
+      "Txn Date": "2 Sep 2019",
+      "Value\nDate": "2 Sep 2019",
+    },
+    {
+      Balance: "31,844.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description:
+        "by debit card-OTHPG\n924901104796ONE97\nCOMMUNICATIONS LNOIDA-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "6 Sep 2019",
+      "Value\nDate": "6 Sep 2019",
+    },
+    {
+      Balance: "29,844.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description:
+        "by debit card-OTHPG\n924901105800ONE97\nCOMMUNICATIONS LNOIDA-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "6 Sep 2019",
+      "Value\nDate": "6 Sep 2019",
+    },
+    {
+      Balance: "27,844.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description:
+        "by debit card-OTHPG\n924902107893ONE97\nCOMMUNICATIONS LNOIDA-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "6 Sep 2019",
+      "Value\nDate": "6 Sep 2019",
+    },
+    {
+      Balance: "25,844.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description:
+        "by debit card-OTHPG\n924902129961ONE97\nCOMMUNICATIONS LNOIDA-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "6 Sep 2019",
+      "Value\nDate": "6 Sep 2019",
+    },
+    {
+      Balance: "23,844.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description:
+        "by debit card-OTHPG\n924902133080ONE97\nCOMMUNICATIONS LNOIDA-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "6 Sep 2019",
+      "Value\nDate": "6 Sep 2019",
+    },
+    {
+      Balance: "23,734.76",
+      Credit: null,
+      Debit: "110.00",
+      Description: "by debit card-SBIPG\nQT7949528859EMITRA\nMUMBAI-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "6 Sep 2019",
+      "Value\nDate": "6 Sep 2019",
+    },
+    {
+      Balance: "24,074.76",
+      Credit: "340.00",
+      Debit: null,
+      Description: "BY TRANSFER-INB\nIMPS925219679279/82337779\n68/XX7968/-",
+      "Ref No./Cheque\nNo.": "MAB00033677292\n4\nMAB00033677292\n4",
+      "Txn Date": "9 Sep 2019",
+      "Value\nDate": "9 Sep 2019",
+    },
+    {
+      Balance: "20,074.76",
+      Credit: null,
+      Debit: "4,000.00",
+      Description: null,
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "12 Sep\n2019",
+      "Value\nDate": "12 Sep\nATM WDL-ATM CASH 4070\n2019\nBLA ATM PHULERA-",
+    },
+    {
+      Balance: "35,074.76",
+      Credit: "15,000.00",
+      Debit: null,
+      Description:
+        "BY TRANSFER-\nUPI/CR/926435090102/SUNIL\nB/SBIN/8233777968/NA-",
+      "Ref No./Cheque\nNo.": "TRANSFER\nFROM\n5099195162098",
+      "Txn Date": "21 Sep\n2019",
+      "Value\nDate": "21 Sep\n2019",
+    },
+    {
+      Balance: "25,074.76",
+      Credit: null,
+      Debit: "10,000.00",
+      Description: null,
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "21 Sep\n2019",
+      "Value\nDate":
+        "21 Sep\nATM WDL-ATM CASH 6284\n2019\nSBBJ MAKRANA NAGAUR\nMAKARANA-",
+    },
+    {
+      Balance: "20,074.76",
+      Credit: null,
+      Debit: "5,000.00",
+      Description: null,
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "21 Sep\n2019",
+      "Value\nDate":
+        "21 Sep\nATM WDL-ATM CASH 6286\n2019\nSBBJ MAKRANA NAGAUR\nMAKARANA-",
+    },
+    {
+      Balance: "19,574.76",
+      Credit: null,
+      Debit: "500.00",
+      Description: null,
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "21 Sep\n2019",
+      "Value\nDate": "21 Sep\nATM WDL-ATM CASH 92641\n2019\nMAKRANA NAGAUR-",
+    },
+    {
+      Balance: "19,787.76",
+      Credit: "213.00",
+      Debit: null,
+      Description: "CREDIT INTEREST--",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "25 Sep\n2019",
+      "Value\nDate": "25 Sep\n2019",
+    },
+    {
+      Balance: "17,787.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description:
+        "by debit card-OTHPG\n927111022447ONE97\nCOMMUNICATIONS LNOIDA-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "28 Sep\n2019",
+      "Value\nDate": "28 Sep\n2019",
+    },
     {
       Balance: "15,787.76",
-      Credit: NaN,
+      Credit: null,
       Debit: "2,000.00",
       Description: "by debit card-OTHPG\n927111349828PAYTM\n1204770770-",
-      "Ref No./Cheque\nNo.": NaN,
+      "Ref No./Cheque\nNo.": null,
       "Txn Date": "28 Sep\n2019",
       "Value\nDate": "28 Sep\n2019",
     },
     {
       Balance: "39,637.76",
       Credit: "23,850.00",
-      Debit: NaN,
+      Debit: null,
       Description:
         "BY TRANSFER-\nNEFT*RBIS0GORJEP*RBI275\n1942207409*TREASURY\nOFFICE-",
       "Ref No./Cheque\nNo.": "TRANSFER\nFROM\n3199421044306",
       "Txn Date": "1 Oct 2019",
-      "Value\nDate": "1 Oct 2019",
+      "Value\nDate": "1 Oct 2019",
     },
-  ];
+    {
+      Balance: "34,637.76",
+      Credit: null,
+      Debit: "5,000.00",
+      Description: null,
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "2 Oct 2019",
+      "Value\nDate": "2 Oct 2019 ATM WDL-ATM CASH 6884\nBLA ATM PHULERA-",
+    },
+    {
+      Balance: "32,637.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description: "by debit card-OTHPG\n927514361138PAYTM\n1204770770-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "2 Oct 2019",
+      "Value\nDate": "2 Oct 2019",
+    },
+    {
+      Balance: "30,637.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description:
+        "by debit card-OTHPG\n927815153745ONE97\nCOMMUNICATIONS LNOIDA-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "5 Oct 2019",
+      "Value\nDate": "5 Oct 2019",
+    },
+    {
+      Balance: "28,637.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description: "by debit card-OTHPG\n927815639260PAYTM\n1204770770-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "5 Oct 2019",
+      "Value\nDate": "5 Oct 2019",
+    },
+    {
+      Balance: "26,637.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description: "by debit card-OTHPG\n927815340963PAYTM\n1204770770-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "5 Oct 2019",
+      "Value\nDate": "5 Oct 2019",
+    },
+    {
+      Balance: "24,637.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description: "by debit card-OTHPG\n927815500523PAYTM\nNOIDA-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "5 Oct 2019",
+      "Value\nDate": "5 Oct 2019",
+    },
+    {
+      Balance: "22,637.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description: "by debit card-OTHPG\n927815341287PAYTM\n1204770770-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "5 Oct 2019",
+      "Value\nDate": "5 Oct 2019",
+    },
+    {
+      Balance: "20,637.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description: "by debit card-OTHPG\n927815502787PAYTM\nNOIDA-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "5 Oct 2019",
+      "Value\nDate": "5 Oct 2019",
+    },
+    {
+      Balance: "18,637.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description: "by debit card-OTHPG\n927815140999PAYTM\n1204770770-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "5 Oct 2019",
+      "Value\nDate": "5 Oct 2019",
+    },
+    {
+      Balance: "16,637.76",
+      Credit: null,
+      Debit: "2,000.00",
+      Description: "by debit card-OTHPG\n927815325638PAYTM\n1204770770-",
+      "Ref No./Cheque\nNo.": null,
+      "Txn Date": "5 Oct 2019",
+      "Value\nDate": "5 Oct 2019",
+    },
+  ]);
+
+  // useEffect(() => {
+  //   const getInfo = async () => {
+  //     try {
+  //       const response = await axios.get("http://127.0.0.1:5000/get_history");
+  //       console.log(JSON.parse(response.data));
+  //       setData(JSON.parse(response.data));
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+  //   getInfo();
+  // }, []);
   return (
     <main className="flex flex-1 flex-col gap-4 md:gap-8">
       <div class="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
@@ -106,8 +380,10 @@ export default async function Transaction() {
               </tr>
             </thead>
             <tbody>
-              {res.map((r) => {
-                const randomNumber = Math.floor(10000000 + Math.random() * 90000000);
+              {data?.map((r) => {
+                const randomNumber = Math.floor(
+                  10000000 + Math.random() * 90000000
+                );
                 return (
                   <tr>
                     <td class="p-4 border-b border-blue-gray-50">

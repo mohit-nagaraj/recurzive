@@ -3,7 +3,7 @@ from img2table.ocr import TesseractOCR
 import pandas as pd
 from PyPDF2 import PdfWriter, PdfReader
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -54,14 +54,13 @@ def get_score():
         final_xlsx = 'temp/final_tables.xlsx'
         all_tables.to_excel(final_xlsx, index=False)
 
-
         df = pd.read_excel('temp/final_tables.xlsx')
         df["Credit"] = df["Credit"].str.replace(',', '')
         df["Credit"] = df["Credit"].astype(float)
         sum = df["Credit"].sum()
 
         score = []
-        score.append({"income":sum})
+        score.append({"income": sum})
 
         return jsonify(score)
     
@@ -70,9 +69,27 @@ def get_score():
     
 @app.route("/get_history", methods=["GET"])
 def get_history():
-    df = pd.read_excel('temp/final_tables.xlsx')
-    ret = df.to_dict(orient="records")
-    return jsonify(ret) 
+    try:
+        df = pd.read_excel('temp/final_tables.xlsx')
+        
+        # Ensure the DataFrame does not contain invalid JSON values
+        df = df.fillna(value=pd.NA).replace({pd.NA: None})
+
+        ret = df.to_dict(orient="records")
+        
+        history = []
+        for record in ret:
+            history.append(record)
+
+        # Logging for debugging purposes
+        print("History data:", history)
+
+        response = make_response(jsonify(history))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
