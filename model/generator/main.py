@@ -7,20 +7,30 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/generator", methods=["POST"])
+@app.route("/generator", methods=["GET"])
 def generator():
     try:
         json_data = request.get_json()
-        model = pickle.load(open("model.pkl", 'rb'))
         ans = []
         income = json_data["income"]
         members = json_data["members"]
         net = json_data["net"]
 
-        data = np.array([income, members, net])
+        with open('model_and_scaler.pkl', 'rb') as file:
+            model_and_scaler = pickle.load(file)
 
-        prediction = model.predict(data)
-        ans.append({"prediction": prediction})
+        model = model_and_scaler['model']
+        scaler = model_and_scaler['scaler']
+
+        user_input = []
+        user_input.append(income)
+        user_input.append(members)
+        user_input.append(net)
+
+        user_input_scaled = scaler.transform([user_input])
+
+        prediction = model.predict(user_input_scaled)
+        ans.append({"prediction": prediction.tolist()})
 
         return jsonify(ans)
     except Exception as e:
