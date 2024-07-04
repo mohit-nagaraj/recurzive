@@ -2,10 +2,28 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Switch } from "@material-tailwind/react";
+import Caller from "@/components/caller";
+
+const genAI = new GoogleGenerativeAI('AIzaSyBQ_C13UOOXxqcZHciDZnLo1h-Zhp_yz3M');
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [isVoiceBot, setIsVoiceBot] = useState(false);
+  // async function run() {
+    
+  //   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
+  
+  //   const prompt = "Write a story about a magic backpack."
+  
+  //   const result = await model.generateContent(prompt);
+  //   const response = await result.response;
+  //   const text = response.text();
+  //   console.log(text);
+  // }
+  
 
   useEffect(() => {
     // Load initial chat history or welcome message from Gemini API here if needed
@@ -17,12 +35,13 @@ export default function Chat() {
     setMessages([...messages, newMessage]);
 
     try {
-      const response = await axios.post("YOUR_GEMINI_API_ENDPOINT", {
-        message: input,
-      });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
+      const result = await model.generateContent(input);
+      const response = await result.response;
+      const text = response.text();
       const reply = {
         id: Date.now(),
-        text: response.data.reply,
+        text: text,
         sender: "bot",
       };
       setMessages((messages) => [...messages, reply]);
@@ -36,7 +55,15 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-grow overflow-auto p-4 space-y-2 max-h-[calc(100vh-135px)] overflow-y-auto">
+      <div className="p-4 flex justify-between">
+       <h1 className="font-semibold text-lg md:text-2xl">{!isVoiceBot?'Chatbot':'Voicebot'}</h1>
+        <div className="mr-4 flex gap-4 items-center">
+          Chatbot
+          <Switch onClick={()=>setIsVoiceBot(prev=>!prev)}/>
+          Voicebot
+        </div>
+      </div>
+      {!isVoiceBot&&<div className="flex-grow overflow-auto p-4 space-y-2 max-h-[calc(100vh-135px)] overflow-y-auto">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -53,8 +80,8 @@ export default function Chat() {
             </div>
           </div>
         ))}
-      </div>
-      <div className="p-4">
+      </div>}
+      {!isVoiceBot&&<div className="p-4">
         <div className="flex space-x-2">
           <input
             type="text"
@@ -71,7 +98,8 @@ export default function Chat() {
             Send
           </button>
         </div>
-      </div>
+      </div>}
+      {isVoiceBot&&<Caller/>}
     </div>
   );
 }

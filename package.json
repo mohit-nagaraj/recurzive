@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@google/generative-ai": "^0.14.1",
     "@vapi-ai/web": "^2.0.0",
     "react-spinners": "^0.14.1"
   }
