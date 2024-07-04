@@ -1,5 +1,5 @@
-const data = {
-  banks: [
+export const data = {
+  "banks": [
     {
       name: "SBI",
       image:

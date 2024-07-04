@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoImagesOutline } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { MdPeopleAlt } from "react-icons/md";
@@ -9,17 +9,20 @@ import { FaEdit } from "react-icons/fa";
 import { FaSpinner } from "react-icons/fa6";
 import { GrScorecard } from "react-icons/gr";
 import ReactSpeedometer from "react-d3-speedometer";
-import { data } from "../utils/dummy.js";
+import { data } from "../dummy/dummy.js";
 export default function Home() {
   const fileRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null); // State to store the PDF URL
   const [state, setState] = useState(0);
-  const [score, setScore] = useState(75);
+  const [score, setScore] = useState(30);
   const handleSelectFile = () => {
     fileRef.current.click();
   };
 
+  useEffect(() => {
+    console.log(data);
+  }, []);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -214,8 +217,74 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="w-full">
-
+          <div className="w-full flex flex-col">
+            {/* generate the table heretabe here
+             */}
+            <table className="w-full mt-6">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 bg-gray-200 text-left">Bank</th>
+                  <th className="py-2 px-4 bg-gray-200 text-left">
+                    Loan Amount
+                  </th>
+                  <th className="py-2 px-4 bg-gray-200 text-left">
+                    Interest Rate
+                  </th>
+                  <th className="py-2 px-4 bg-gray-200 text-left">Form</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.banks.map((bank, index) => (
+                  <tr key={index} className="my-2">
+                    <td className="py-2 px-4 flex justify-start items-center">
+                      <img
+                        src={bank.image}
+                        alt={bank.name}
+                        className="w-8 h-8 mr-2"
+                      />
+                      <p className="font-semibold text-lg">{bank.name}</p>
+                    </td>
+                    <td className="py-2 px-12">
+                      {Object.entries(bank.score_ranges).map(([s, ranges]) => {
+                        if (s < score && s >= score - 10) {
+                          return (
+                            <div key={s}>
+                              <p className="font-semibold">
+                                ₹
+                                {(ranges.loan_amount.lower_bound +
+                                  ranges.loan_amount.upper_bound) /
+                                  2}
+                              </p>
+                            </div>
+                          );
+                        }
+                      })}
+                    </td>
+                    <td className="py-2 px-10">
+                      {Object.entries(bank.score_ranges).map(([s, ranges]) => {
+                        if (s < score && s >= score - 10) {
+                          return (
+                            <div key={s}>
+                              <p className="font-semibold">
+                                {(ranges.interest_rate.lower_bound +
+                                  ranges.interest_rate.upper_bound) /
+                                  2}
+                                %
+                              </p>
+                            </div>
+                          );
+                        }
+                      })}
+                    </td>
+                    <td className="py-2">
+                      <button className="px-4 py-2 bg-black text-white font-semibold rounded-lg">
+                        Apply
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </main>
       )}
