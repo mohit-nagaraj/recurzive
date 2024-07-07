@@ -7,8 +7,7 @@ import ActiveCallDetail from "./activeCallDetail";
 import Button from "./base/button";
 
 // Put your Vapi Public Key below.
-//key: 4b4aa931-3bdc-4b4f-bc0f-ab876649be52
-const vapi = new Vapi("4b4aa931-3bdc-4b4f-bc0f-ab876649be52");
+const vapi = new Vapi("");
 
 const Caller = () => {
   const [connecting, setConnecting] = useState(false);
@@ -63,7 +62,7 @@ const Caller = () => {
   // call start handler
   const startCallInline = () => {
     setConnecting(true);
-    vapi.start('9bd04b5c-a1f4-4d99-a6b9-b039ff4d62f1');
+    vapi.start('');
   };
   const endCall = () => {
     vapi.stop();

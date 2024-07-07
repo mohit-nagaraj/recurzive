@@ -7,7 +7,7 @@ import { Switch } from "@material-tailwind/react";
 import Caller from "@/components/caller";
 import Markdown from "react-markdown";
 
-const genAI = new GoogleGenerativeAI("AIzaSyBQ_C13UOOXxqcZHciDZnLo1h-Zhp_yz3M");
+const genAI = new GoogleGenerativeAI("");
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
